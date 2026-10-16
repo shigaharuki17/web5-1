@@ -50,22 +50,3 @@ vue.config.js                      相对资源路径、开发端口
 preview.js                         打包结果预览服务
 package-lock.json                  固定依赖
 ```
-
-## 提交材料与录制建议
-
-1. 源码：保留 `src`、`public`、配置文件、`package.json`、`package-lock.json`；不提交 `node_modules` 和安装缓存。
-2. 打包结果：运行 `npm run build`，提供完整 `dist` 目录。
-3. 演示：启动项目，录制用户页、题目页切换、查询、添加弹窗、编辑、删除确认与分页；录制时可补充展示组件目录、路由文件及打包成功结果。
-4. 提交文件名中的姓名、学号，以及平台提交入口，请按老师的实际要求填写。项目不会代替你向学校平台提交。
-
-## 参考材料
-
-- 本地指导文本：`D:\webdesign-master\2.2前端项目开发.md`
-- 本地提交要求视频：`vue-element作业提交要求.mp4`
-- [教学视频一](https://www.bilibili.com/video/BV18rhez3Epx)
-- [教学视频二](https://www.bilibili.com/video/BV18rhez3E5s)
-- [教学视频三](https://www.bilibili.com/video/BV18rhez3EGo)
-- [Vue 2 文档](https://v2.cn.vuejs.org/)
-- [Element UI 文档](https://element.eleme.cn/#/zh-CN)
-
-核对范围：已读取指导文本，并抽取本地提交视频多个时间点画面核对两页布局、组件、打包与演示形式。B 站页面及接口访问受限，未逐段观看三个在线教学视频；本地视频语音未自动转写，因此仅口头说明的提交细节还需你最终核对。
