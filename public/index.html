@@ -1,2 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="基于 Vue 2 与 Element UI 的 Quiz 后台管理课程项目"><title>Quiz后台管理</title></head><body><noscript>请开启 JavaScript 后使用 Quiz 后台管理。</noscript><div id="app"></div></body></html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="基于 Vue 2 与 Element UI 的 Quiz 后台管理课程项目"><title>Quiz后台管理</title>
+<script>
+// 在加载相对资源之前恢复静态站点根路径，兼容直接打开深层页面。
+(function () {
+  var route = location.pathname.match(/^(.*?)(\/(?:user|question(?:\/add)?))\/?$/);
+  if (route && !location.hash) {
+    var base = document.createElement('base');
+    base.href = route[1] + '/';
+    document.head.appendChild(base);
+    history.replaceState(null, '', route[1] + '/#' + route[2] + location.search);
+  }
+})();
+</script></head><body><noscript>请开启 JavaScript 后使用 Quiz 后台管理。</noscript><div id="app"></div></body></html>
