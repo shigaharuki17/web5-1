@@ -13,7 +13,7 @@
       <el-table-column label="操作" width="178"><template slot-scope="scope"><el-button size="mini" @click="openDialog(scope.row)">编辑</el-button><el-button size="mini" type="danger" @click="remove(scope.row)">删除</el-button></template></el-table-column>
     </el-table>
     <div class="pagination-row"><span class="record-note">选择题库 · 共 {{ filteredRows.length }} 道</span><el-pagination background :current-page="page" :page-size="pageSize" :page-sizes="[5,10,20]" :total="filteredRows.length" layout="total, sizes, prev, pager, next, jumper" @current-change="page=$event" @size-change="changeSize"></el-pagination></div>
-    <el-dialog :title="editingId === null ? '添加题目' : '编辑题目'" :visible.sync="dialogVisible" width="620px" :close-on-click-modal="false" @closed="clearValidation">
+    <el-dialog :title="editingId === null ? '添加题目' : '编辑题目'" :visible.sync="dialogVisible" width="620px" top="0" custom-class="management-dialog" append-to-body :close-on-click-modal="false" @closed="clearValidation">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="dialog-form" @submit.native.prevent="submit">
         <el-form-item label="问题" prop="title"><el-input v-model.trim="form.title" type="textarea" :rows="2" maxlength="200" show-word-limit placeholder="请输入问题"></el-input></el-form-item>
         <el-form-item v-for="(letter,i) in letters" :key="letter" :label="'选项 '+letter" :prop="'options.'+i" :rules="optionRules"><el-input v-model.trim="form.options[i]" maxlength="100" :placeholder="'请输入选项 '+letter"></el-input></el-form-item>

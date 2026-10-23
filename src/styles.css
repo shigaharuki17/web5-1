@@ -7,3 +7,13 @@
 .question-page .question-add-button{background:#67c23a;border-color:#67c23a}
 .question-page .question-add-button:hover,.question-page .question-add-button:focus{background:#85ce61;border-color:#85ce61}
 .question-page .question-add-button:active{background:#55a532;border-color:#55a532}
+
+/* 弹窗脱离表格布局，短窗口下内容滚动，标题与操作始终可见。 */
+.el-dialog__wrapper{display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:clamp(16px,7vh,64px) 12px}
+.management-dialog.el-dialog{display:flex;flex-direction:column;max-height:calc(100vh - clamp(32px,14vh,128px));margin:0 auto!important}
+.management-dialog .el-dialog__header{flex:none;padding:22px 24px 16px;border-bottom:1px solid #ebeef5}
+.management-dialog .el-dialog__body{flex:1;min-height:0;overflow-y:auto;padding:24px}
+.management-dialog .el-dialog__footer{flex:none;padding:16px 24px;border-top:1px solid #ebeef5;background:#fff}
+.management-dialog .el-form-item:last-child{margin-bottom:0}
+@media(max-height:700px){.el-dialog__wrapper{padding-top:16px}.management-dialog.el-dialog{max-height:calc(100vh - 32px)}}
+input[type="password"]::-ms-reveal,input[type="password"]::-ms-clear{display:none}

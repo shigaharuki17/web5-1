@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/user", "destination": "/index.html" },
+    { "source": "/user/", "destination": "/index.html" },
+    { "source": "/question", "destination": "/index.html" },
+    { "source": "/question/", "destination": "/index.html" },
+    { "source": "/question/add", "destination": "/index.html" },
+    { "source": "/question/add/", "destination": "/index.html" }
+  ]
+}

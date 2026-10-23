@@ -3,7 +3,9 @@ export const initialUsers = Array.from({ length: 16 }, (_, i) => ({
   id: i + 1,
   date: `2025-10-${String(i + 1).padStart(2, '0')}`,
   username: ['王小虎', '张三', '李四', '赵六', '陈晨', '林晓', '刘洋', '周宁', '吴雨', '郑悦', '孙明', '何川', '许清', '高远', '宋佳', '唐可'][i],
-  password: '123456'
+  passwordHash: 'bf94cd21860e8a766f1eb254306b0aedfe9f62b9c08940bf00e19a76976c080f',
+  passwordSalt: 'a87fb129507a51cbd3ce6af51eb60a45',
+  passwordIterations: 100000
 }))
 export const initialQuestions = [
   ['法国的首都是哪里？', ['巴黎', '伦敦', '柏林', '罗马'], 'A'],
@@ -23,7 +25,7 @@ export const initialQuestions = [
 export function loadData(key, fallback) {
   try {
     const stored = JSON.parse(localStorage.getItem(key))
-    if (Array.isArray(stored) && stored.every(row => row && typeof row.id === 'number' && (key.includes('users') ? typeof row.username === 'string' && typeof row.password === 'string' && typeof row.date === 'string' : typeof row.title === 'string' && Array.isArray(row.options) && row.options.length === 4 && row.options.every(v => typeof v === 'string') && ['A','B','C','D'].includes(row.answer)))) return stored
+    if (Array.isArray(stored) && stored.every(row => row && typeof row.id === 'number' && (key.includes('users') ? typeof row.username === 'string' && typeof row.passwordHash === 'string' && typeof row.date === 'string' : typeof row.title === 'string' && Array.isArray(row.options) && row.options.length === 4 && row.options.every(v => typeof v === 'string') && ['A','B','C','D'].includes(row.answer)))) return stored
   } catch (_) { /* 不可用或旧数据格式时使用演示数据。 */ }
   return JSON.parse(JSON.stringify(fallback))
 }
