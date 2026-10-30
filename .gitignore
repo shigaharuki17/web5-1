@@ -8,3 +8,9 @@ dist/
 
 /启动开发环境.cmd
 /预览打包结果.cmd
+backend/target/
+backend/config/application-local.properties
+.local/
+.env.local
+.env.*.local
+dist-demo/

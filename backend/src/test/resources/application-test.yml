@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: ${QUIZ_TEST_DB_URL:jdbc:mysql://127.0.0.1:3306/quiz_homework_test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai}

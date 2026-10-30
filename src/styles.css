@@ -17,3 +17,4 @@
 .management-dialog .el-form-item:last-child{margin-bottom:0}
 @media(max-height:700px){.el-dialog__wrapper{padding-top:16px}.management-dialog.el-dialog{max-height:calc(100vh - 32px)}}
 input[type="password"]::-ms-reveal,input[type="password"]::-ms-clear{display:none}
+.retry-users{margin:12px 0}

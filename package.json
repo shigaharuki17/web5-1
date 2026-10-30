@@ -2,7 +2,7 @@
   "name": "quiz-admin",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "serve": "vue-cli-service serve", "build": "vue-cli-service build", "preview": "node preview.js" },
+  "scripts": { "serve": "vue-cli-service serve", "build": "vue-cli-service build", "build:demo": "vue-cli-service build --mode demo --dest dist-demo", "preview": "node preview.js" },
   "dependencies": { "vue": "2.7.16", "vue-router": "3.5.1", "element-ui": "2.15.14" },
   "devDependencies": { "@vue/cli-service": "5.0.9", "vue-template-compiler": "2.7.16" },
   "engines": { "node": ">=16.19.1" }

@@ -1,0 +1,44 @@
+### 1. 无参数 Controller 测试
+GET http://127.0.0.1:8080/hello
+
+### 2. 简单参数（GET）
+GET http://127.0.0.1:8080/simpleParam?name=tom&age=10
+
+### 3. 简单参数（POST）
+POST http://127.0.0.1:8080/simpleParam
+Content-Type: application/x-www-form-urlencoded
+
+name=tom&age=10
+
+### 4. 实体参数
+GET http://127.0.0.1:8080/simpleUser?name=tom&age=10
+
+### 5. 注册用户（JSON）
+POST http://127.0.0.1:8080/register
+Content-Type: application/json
+
+{"username":"testuser123","password":"DemoPass123","checkpassword":"DemoPass123"}
+
+### 6. 注册用户（课程表单参数）
+POST http://127.0.0.1:8080/register
+Content-Type: application/x-www-form-urlencoded
+
+username=formuser123&password=DemoPass123&checkpassword=DemoPass123
+
+### 7. 用户名查询
+GET http://127.0.0.1:8080/api/users?username=test
+
+### 8. 全部活跃用户
+GET http://127.0.0.1:8080/api/users
+
+### 9. 按 ID 逻辑删除（将 1 替换成实际创建的 ID）
+DELETE http://127.0.0.1:8080/api/users/1
+
+### 10. 按用户名逻辑删除（课程接口）
+GET http://127.0.0.1:8080/deleteByName?username=testuser123
+
+### 11. 按 ID 物理删除（无法恢复，仅使用自己创建的测试用户）
+DELETE http://127.0.0.1:8080/api/users/1/hard
+
+### 12. 按用户名物理删除，包括同名历史逻辑删除记录
+POST http://127.0.0.1:8080/hardDeleteByName?username=testuser123
