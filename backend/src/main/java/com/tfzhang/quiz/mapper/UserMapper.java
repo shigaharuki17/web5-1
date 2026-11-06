@@ -14,6 +14,12 @@ public interface UserMapper {
     @Select("SELECT " + COLUMNS + " FROM `user` WHERE isDelete = 0 AND LOCATE(#{keyword}, userName) > 0 ORDER BY id DESC")
     List<User> search(@Param("keyword") String keyword);
 
+    @Select("SELECT COUNT(*) FROM `user` WHERE isDelete=0 AND userName LIKE CONCAT('%',#{keyword},'%') ESCAPE '!'")
+    long count(@Param("keyword") String keyword);
+
+    @Select("SELECT " + COLUMNS + " FROM `user` WHERE isDelete=0 AND userName LIKE CONCAT('%',#{keyword},'%') ESCAPE '!' ORDER BY id DESC LIMIT #{start},#{pageSize}")
+    List<User> page(@Param("start") int start, @Param("pageSize") int pageSize, @Param("keyword") String keyword);
+
     @Select("SELECT COUNT(*) FROM `user` WHERE activeName = LOWER(#{username})")
     int existsByName(@Param("username") String username);
 

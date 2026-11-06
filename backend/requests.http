@@ -42,3 +42,27 @@ DELETE http://127.0.0.1:8080/api/users/1/hard
 
 ### 12. 按用户名物理删除，包括同名历史逻辑删除记录
 POST http://127.0.0.1:8080/hardDeleteByName?username=testuser123
+
+### 用户 SQL 分页（data.total / data.rows）
+GET http://127.0.0.1:8080/users?page=1&pageSize=5
+
+### 用户关键字查询
+GET http://127.0.0.1:8080/findUser?keyword=test
+
+### 新增题目
+POST http://127.0.0.1:8080/addQuestion
+Content-Type: application/json
+
+{"question":"下列哪项不是编程语言？","optiona":"Java","optionb":"Apple","optionc":"Python","optiond":"Javascript","answer":"b"}
+
+### 题目 SQL 分页（data.total / data.qsBeanList）
+GET http://127.0.0.1:8080/questions?page=1&pageSize=5
+
+### 题目关键字查询
+GET http://127.0.0.1:8080/findQuestion?keyword=编程
+
+### 随机获取最多 5 道未删除题目
+GET http://127.0.0.1:8080/getQuestion
+
+### 题目逻辑删除（用新增返回的实际 ID 替换 1）
+GET http://127.0.0.1:8080/delQuestion?id=1

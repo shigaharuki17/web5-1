@@ -1,4 +1,4 @@
-// 本阶段是独立前端案例：演示数据只保存在当前浏览器，不需要后端服务。
+// 独立静态演示模式的数据；默认构建通过 API 使用 MySQL 数据。
 export const initialUsers = Array.from({ length: 16 }, (_, i) => ({
   id: i + 1,
   date: `2025-10-${String(i + 1).padStart(2, '0')}`,

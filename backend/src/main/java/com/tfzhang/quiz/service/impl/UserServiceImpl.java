@@ -3,6 +3,8 @@ package com.tfzhang.quiz.service.impl;
 import com.tfzhang.quiz.mapper.UserMapper;
 import com.tfzhang.quiz.model.User;
 import com.tfzhang.quiz.model.UserRequest;
+import com.tfzhang.quiz.model.PageBean;
+import com.tfzhang.quiz.utils.PageQuery;
 import com.tfzhang.quiz.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +22,14 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public UserServiceImpl(UserMapper mapper) { this.mapper = mapper; }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageBean<User> page(Integer page, Integer pageSize, String keyword) {
+        int offset = PageQuery.offset(page, pageSize);
+        String search = PageQuery.like(keyword);
+        return new PageBean<>(mapper.count(search), mapper.page(offset, pageSize, search));
+    }
 
     @Override
     @Transactional(readOnly = true)

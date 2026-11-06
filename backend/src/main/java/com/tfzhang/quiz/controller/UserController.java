@@ -11,9 +11,21 @@ public class UserController {
     private final UserService service;
     public UserController(UserService service) { this.service = service; }
 
-    @GetMapping({"/api/users", "/users"})
+    @GetMapping("/api/users")
     public Result<List<User>> list(@RequestParam(required = false) String username) {
         return Result.success(service.list(username));
+    }
+
+    @GetMapping({"/users", "/api/users/page"})
+    public Result<PageBean<User>> page(@RequestParam(defaultValue = "1") Integer page,
+                                     @RequestParam(defaultValue = "5") Integer pageSize,
+                                     @RequestParam(required = false) String keyword) {
+        return Result.success(service.page(page, pageSize, keyword));
+    }
+
+    @GetMapping("/findUser")
+    public Result<List<User>> findUser(@RequestParam(defaultValue = "") String keyword) {
+        return Result.success(service.list(keyword));
     }
 
     @PostMapping(value = {"/api/users", "/register"}, consumes = MediaType.APPLICATION_JSON_VALUE)

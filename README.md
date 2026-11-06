@@ -1,6 +1,6 @@
 # Quiz 后台管理
 
-Vue 2 + Element UI + Vue Router 前端，配套 Java 17 / Spring Boot / MyBatis / MySQL 用户管理后端。
+Vue 2 + Element UI + Vue Router 前端，配套 Java 17 / Spring Boot / MyBatis / MySQL 用户与题目管理后端。
 
 ## 本地运行
 
@@ -20,9 +20,10 @@ Vue 2 + Element UI + Vue Router 前端，配套 Java 17 / Spring Boot / MyBatis 
 - 用户名为 4–20 位英文字母或数字，密码至少 8 位，必须二次确认；后端重新校验所有参数，并通过查询和唯一索引防止重复注册。
 - 密码始终遮罩显示，服务端使用 BCrypt 单向加盐保存，API 不返回密码或密码派生值。
 - 逻辑删除保留记录并隐藏于普通查询，物理删除无法恢复。
-- 题目管理保留原有本地数据及全部操作。本次四份指导的数据库接口范围为用户管理。
+- 用户与题目都使用真实 MySQL 分页：后端返回总数与当前页，关键字查询与分页结合。
+- 题目支持新增、编辑、逻辑删除与关键字查询；用户端 `/getQuestion` 随机返回最多 5 道未删除的题目。
 - `backend/requests.http` 提供 Controller、注册、查询及删除接口示例。
-- `mvn -s maven-settings.xml test` 使用真实 MySQL 独立测试库验证 MyBatis、主键回填、注册校验、密码保护、查重与删除。
+- `mvn -s maven-settings.xml test` 使用真实 MySQL 独立测试库，验证用户注册、密码保护、用户分页，以及题目增删改查、分页与随机取题。
 
 ## 静态演示版本
 
@@ -35,6 +36,7 @@ Vue 2 + Element UI + Vue Router 前端，配套 Java 17 / Spring Boot / MyBatis 
 ```text
 src/views/element/       用户与题目页面
 src/api/users.js        用户 API
+src/api/questions.js    题目 API
 backend/src/main/       Java 后端及 MySQL 初始化脚本
 backend/src/test/       真实 MySQL 集成测试
 backend/requests.http   接口示例

@@ -13,7 +13,7 @@
       <el-table-column label="密码" min-width="140"><template><span aria-label="密码已隐藏">••••••••</span></template></el-table-column>
       <el-table-column label="操作" :width="useBackend ? 280 : 192"><template slot-scope="scope"><el-button size="mini" @click="openDialog(scope.row)">编辑</el-button><el-button size="mini" type="danger" @click="remove(scope.row)">删除</el-button><el-button v-if="useBackend" size="mini" type="warning" plain @click="remove(scope.row, true)">物理删除</el-button></template></el-table-column>
     </el-table>
-    <div class="pagination-row"><span class="record-note">用户信息 · 共 {{ filteredRows.length }} 条</span><el-pagination background :current-page="page" :page-size="pageSize" :page-sizes="[5,10,20]" :total="filteredRows.length" layout="total, sizes, prev, pager, next, jumper" @current-change="page=$event" @size-change="changeSize"></el-pagination></div>
+    <div class="pagination-row"><span class="record-note">用户信息 · 共 {{ recordTotal }} 条</span><el-pagination background :current-page="page" :page-size="pageSize" :page-sizes="[5,10,20]" :total="recordTotal" layout="total, sizes, prev, pager, next, jumper" @current-change="changePage" @size-change="changeSize"></el-pagination></div>
     <el-dialog :title="editingId === null ? '添加用户' : '编辑用户'" :visible.sync="dialogVisible" width="520px" top="0" custom-class="management-dialog" append-to-body :close-on-click-modal="false" :close-on-press-escape="!saving" :show-close="!saving" @closed="onDialogClosed">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="dialog-form" @submit.native.prevent="submit">
         <el-form-item label="用户名" prop="username"><el-input ref="username" v-model.trim="form.username" maxlength="20" show-word-limit :placeholder="useBackend ? '4–20 位英文字母或数字' : '请输入用户名'" autocomplete="off" :disabled="saving"></el-input></el-form-item>
@@ -35,7 +35,7 @@ export default {
   name: 'UserView',
   data() {
     return {
-      rows: [], useBackend, loadVersion: 0, loading: true, saving: false, storageError: '', keyword: '', appliedKeyword: '', page: 1, pageSize: 5,
+      rows: [], total: 0, useBackend, loadVersion: 0, loading: true, saving: false, storageError: '', keyword: '', appliedKeyword: '', page: 1, pageSize: 5,
       dialogVisible: false, editingId: null, form: { username: '', password: '', confirmPassword: '', date: '' },
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: useBackend ? 4 : 2, max: 20, message: useBackend ? '用户名长度为 4–20 个字符' : '用户名长度为 2–20 个字符', trigger: 'blur' }, { validator: (_, value, callback) => callback(useBackend && value && !/^[a-zA-Z0-9]+$/.test(value) ? new Error('用户名只能包含英文字母和数字') : undefined), trigger: 'blur' }],
@@ -65,7 +65,8 @@ export default {
   },
   computed: {
     filteredRows() { const k = this.appliedKeyword.toLowerCase(); return this.rows.filter(row => row.username.toLowerCase().includes(k)) },
-    pageRows() { return this.filteredRows.slice((this.page - 1) * this.pageSize, this.page * this.pageSize) }
+    recordTotal() { return useBackend ? this.total : this.filteredRows.length },
+    pageRows() { return useBackend ? this.rows : this.filteredRows.slice((this.page - 1) * this.pageSize, this.page * this.pageSize) }
   },
   methods: {
     async loadRows() {
@@ -73,17 +74,20 @@ export default {
       this.loading = true
       this.storageError = ''
       try {
-        const rows = useBackend ? await fetchUsers(this.appliedKeyword) : await loadUserData(KEY, initialUsers)
+        const result = useBackend ? await fetchUsers(this.appliedKeyword, this.page, this.pageSize) : { rows: await loadUserData(KEY, initialUsers), total: 0 }
         if (version === this.loadVersion) {
-          this.rows = rows
-          this.page = Math.max(1, Math.min(this.page, Math.ceil(this.filteredRows.length / this.pageSize)))
+          this.rows = result.rows
+          this.total = result.total
+          const validPage = Math.max(1, Math.ceil(this.recordTotal / this.pageSize))
+          if (this.page > validPage) { this.page = validPage; if (useBackend) return await this.loadRows() }
         }
       } catch (error) { if (version === this.loadVersion) this.storageError = error.message || '用户数据加载失败，请刷新重试' }
       finally { if (version === this.loadVersion) this.loading = false }
     },
     async search() { this.appliedKeyword = this.keyword.trim(); this.page = 1; if (useBackend) await this.loadRows() },
     reset() { this.keyword = ''; return this.search() },
-    changeSize(size) { this.pageSize = size; this.page = 1 },
+    changePage(page) { if (page === this.page) return; this.page = page; if (useBackend) this.loadRows() },
+    changeSize(size) { this.pageSize = size; this.page = 1; if (useBackend) this.loadRows() },
     clearValidation() { if (this.$refs.form) this.$refs.form.clearValidate() },
     onDialogClosed() { this.form.password = ''; this.form.confirmPassword = ''; this.clearValidation() },
     openDialog(row) {

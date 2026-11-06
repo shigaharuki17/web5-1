@@ -49,4 +49,28 @@ Java 17、Spring Boot 3.5、MyBatis 3、MySQL。采用 `Controller → Service �
 
 开发时也可分别运行后端和 `npm run serve`，开发服务器把 `/api` 转发到本机 8080。
 
-题目管理沿用上一阶段的浏览器本地数据；本次四份指导的数据库接口范围为用户管理。
+用户管理和题目管理均已接入 MySQL。`questions` 表保存题干、四个选项与四个答案标志，新增时仅一个标志为 true；逻辑删除后不会出现在分页、搜索或随机取题中。
+
+## 第 5–7 份指导新增接口
+
+| 方法与路径 | 返回 data |
+| --- | --- |
+| `GET /users?page=1&pageSize=5` | `{total, rows}`，用户数据库分页 |
+| `GET /api/users/page?page=1&pageSize=5&keyword=abc` | 用户查询与数据库分页组合 |
+| `GET /findUser?keyword=abc` | 未删除用户的模糊查询列表，不返回密码 |
+| `POST /addQuestion` | 题目 JSON 或表单：question、optiona、optionb、optionc、optiond、answer |
+| `POST /api/questions` | 同上，返回新增题目及自增 ID |
+| `PUT /api/questions/{id}` | 编辑未删除题目 |
+| `DELETE /api/questions/{id}` | 题目逻辑删除 |
+| `GET/POST /delQuestion?id=1` | 课程兼容删除接口 |
+| `GET /questions?page=1&pageSize=5&keyword=关键字` | `{total, qsBeanList}` |
+| `GET /api/questions?page=1&pageSize=5&keyword=关键字` | 同上 |
+| `GET /findQuestion?keyword=关键字` | 管理端题目列表 |
+| `GET /getQuestion` | 随机最多 5 题，题干与 `answers: [{text, correct}]` |
+| `GET /api/questions/random` | 同上 |
+
+用户分页使用 `PageBean`，题目分页使用 `QSBeanPage`。分页在 SQL 中通过 COUNT、LIMIT 和 OFFSET 完成，排序为 ID 倒序；页码至少为 1、每页 1–100 条，越界页返回空列表。前端在删除末页最后一条后自动回到有效页。关键字使用参数化 LIKE 并转义 `%`、`_`、`!`，按字面子串搜索，过滤逻辑删除记录。
+
+管理端题目对象包含 `id`、`questionText`、`options`、`answer`（正确答案文本）和 `answerKey`（a/b/c/d，供编辑回填）。用户端转换对象只包含 `question`、`answers`，不暴露数据库内部删除标志和时间。
+
+题干与每个选项必填，最多 255 个字符；四个选项不能重复；答案必须为 A–D 中的一项，大小写均可。题库不足 5 题时返回实际数量，空题库返回空列表。建表使用 IF NOT EXISTS，不清空上次用户或题目。

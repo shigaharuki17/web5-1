@@ -22,9 +22,10 @@ async function request(path, method = 'GET', body) {
   } finally { clearTimeout(timeout) }
 }
 
-export async function fetchUsers(keyword = '') {
-  const users = await request(keyword ? `?username=${encodeURIComponent(keyword)}` : '')
-  return users.map(user => ({ id: user.id, username: user.userName, date: (user.createTime || '').slice(0, 10), userRole: user.userRole }))
+export async function fetchUsers(keyword = '', page = 1, pageSize = 5) {
+  const params = new URLSearchParams({ keyword, page: String(page), pageSize: String(pageSize) })
+  const result = await request(`/page?${params}`)
+  return { total: result.total, rows: result.rows.map(user => ({ id: user.id, username: user.userName, date: (user.createTime || '').slice(0, 10), userRole: user.userRole })) }
 }
 export const createUser = form => request('', 'POST', { username: form.username, password: form.password, checkpassword: form.confirmPassword })
 export const updateUser = (id, form) => request(`/${id}`, 'PUT', { username: form.username, password: form.password, checkpassword: form.confirmPassword })
